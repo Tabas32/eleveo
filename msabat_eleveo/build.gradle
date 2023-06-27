@@ -13,6 +13,9 @@ dependencies {
 
     // For selenide
     implementation 'com.codeborne:selenide:6.15.0'
+
+    // For tests
+    implementation 'org.assertj:assertj-core:3.24.2'
 }
 
 //todo remove ?

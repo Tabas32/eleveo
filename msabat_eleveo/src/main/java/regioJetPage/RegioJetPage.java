@@ -1,17 +1,17 @@
 package regioJetPage;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.*;
+import models.ConnectionTransfer;
 import org.openqa.selenium.By;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
+import static utils.DateUtility.getNextMondayDay;
 
 public class RegioJetPage {
 
@@ -20,7 +20,18 @@ public class RegioJetPage {
     private final By CITY_INPUT_OPTION_LOCATOR = By.cssSelector("div.menu-row");
     private final By DEPARTURE_DATE_BUTTON_LOCATOR = By.cssSelector("[data-id='departure-date']");
     private final By SEARCH_SUBMIT_BUTTON = By.cssSelector("[data-id='search-btn']");
+    private final By CONNECTION_TIME = By.cssSelector("h2[aria-label^='Connection ']"); // todo probably remove
+    private final By CONNECTION_CARD = By.cssSelector("li div div.card");
+
     private Function<String, By> DEPARTURE_DATE_CALENDAR_DAY_BUTTON_LOCATOR = date -> By.cssSelector("[aria-label='Select departure date: " + date + "'], [aria-label='Selected departure date: " + date + "']");
+    private Function<String, By> PARAGRAPH_WITH_TEXT = text -> By.xpath("//p[contains(text(), '" + text + "')]");
+
+    // connection card locators
+    private final By CONNECTION_CARD_EXPAND_BUTTON = By.cssSelector("div > svg");
+    private final By CONNECTION_CARD_ORIGIN_CITY = By.cssSelector("div.cardOpenTransfer-depart-icon + div span:first-of-type");
+    private final By CONNECTION_CARD_DESTINATION_CITY = By.cssSelector("div.cardOpenTransfer-arrival-icon + div");
+    private final By CONNECTION_CARD_JOURNEY = By.cssSelector("ul[aria-label='Journey information']");
+    private final By CONNECTION_CARD_TRANSFER_ITEM = By.cssSelector("ul[aria-label='Journey information'] li");
 
     /**
      * Open regiojet.com and wait for page to load
@@ -66,36 +77,55 @@ public class RegioJetPage {
         return this;
     }
 
+    public boolean isDateDisplayedOnPage(String date) {
+        return element(PARAGRAPH_WITH_TEXT.apply(date)).shouldBe(visible).isDisplayed();
+    }
+
+    public List<String> getOriginCities() {
+        return getInfoFromConnectionCard( e -> e.find(CONNECTION_CARD_ORIGIN_CITY).text() );
+    }
+
+    public List<String> getDestinationCities() {
+        return getInfoFromConnectionCard( e -> e.find(CONNECTION_CARD_DESTINATION_CITY).text() );
+    }
+
+    public List<String> getTransferLabels() {
+        return getInfoFromConnectionCard( e -> e.find(CONNECTION_CARD_EXPAND_BUTTON).parent().sibling(1).text());
+    }
+
+    public List<List<ConnectionTransfer>> getTransfers() {
+        return getInfoFromConnectionCard( e -> e.findAll(CONNECTION_CARD_TRANSFER_ITEM).stream().map(transferItem -> {
+            ElementsCollection transferData = transferItem.findAll("div[aria-hidden='true']");
+            if (transferData.isEmpty()) { return null; }
+
+            return new ConnectionTransfer(
+                    transferData.get(1).text(),
+                    transferData.get(4).text(),
+                    transferData.get(0).text(),
+                    transferData.get(3).text(),
+                    transferData.get(2).text()
+            );
+        })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()));
+    }
+
     private RegioJetPage setCity(String city, By inputLocator) {
         element(inputLocator).shouldBe(visible).setValue(city);
         element(CITY_INPUT_OPTION_LOCATOR).click();
         return this;
     }
 
-    /**
-     * @return date of next monday (or today date, if it is monday) in format EEEE, MMMM d, yyyy
-     */
-    static private String getNextMondayDay() {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate thisWeekMonday = currentDate.with(DayOfWeek.MONDAY);
+    private <T> List<T> getInfoFromConnectionCard(Function<SelenideElement, T> actionOnConnectionCard) {
+        element(CONNECTION_CARD).shouldBe(visible);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy", Locale.ENGLISH);
+        return elements(CONNECTION_CARD).stream().map( connectionCard -> {
+            if (!connectionCard.find(CONNECTION_CARD_JOURNEY).isDisplayed()) {
+                connectionCard.find(CONNECTION_CARD_EXPAND_BUTTON).click();
+            }
 
-        if (currentDate.getDayOfWeek().getValue() == 1) {
-            return thisWeekMonday.format(formatter);
-        } else {
-            return  thisWeekMonday.plusWeeks(1).format(formatter);
-        }
-    }
-
-    public static void main(String[] args) {
-        new RegioJetPage().open()
-                .setOriginCity("Ostrava")
-                .setDestinationCity("Brno")
-                .setDepartureDateToNextMonday()
-                .search();
-
-        try { Thread.sleep(20000); }
-        catch (InterruptedException e) { System.out.println("Failed wait"); }
+            return actionOnConnectionCard.apply(connectionCard);
+        })
+            .collect(Collectors.toList());
     }
 }
