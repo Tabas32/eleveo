@@ -1,10 +1,40 @@
+import org.junit.jupiter.api.Test;
+import steps.RegioJetApiSteps;
+import steps.RegioJetSteps;
+
 public class RegioJetSearch {
 
-    /* Test
-    1. Open page
-    2. Search for route Ostrava to Brno for next monday
-    3. All connection departure at the specified day
-    4. All connection departure from specified city
-    5. All connection arrive to specified city
-     */
+    @Test
+    public void userIsAbleToSearchForRouteConnection() {
+        RegioJetSteps steps = new RegioJetSteps();
+
+        steps.userOpensRegioJetPage();
+        steps.userSearchForConnectionForNextMonday("Ostrava", "Brno");
+        steps.connectionsAreDisplayedForTheSpecifiedDay();
+
+        steps.allConnectionDepartureFromSpecifiedCity();
+        steps.allConnectionArriveToSpecifiedCity();
+        steps.allConnectionsHaveCorrectNumberOfTransfersDisplayed();
+    }
+
+    @Test
+    public void obtainData() {
+        System.out.println("Printing data obtained with selenide from GUI");
+        System.out.println("=============================================");
+        RegioJetSteps steps = new RegioJetSteps();
+
+        steps.userOpensRegioJetPage();
+        steps.userSearchForConnectionForNextMonday("Ostrava", "Brno");
+
+        steps.printInformationAboutRoutes();
+    }
+
+    @Test
+    public void obtainDataWithApiCalls() {
+        System.out.println("Printing data obtained from API");
+        System.out.println("===============================");
+        RegioJetApiSteps steps = new RegioJetApiSteps();
+
+        steps.getConnectionRoutesFromOstravaToBrno();
+    }
 }

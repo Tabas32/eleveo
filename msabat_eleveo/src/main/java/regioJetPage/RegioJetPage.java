@@ -15,6 +15,8 @@ import static utils.DateUtility.getNextMondayDay;
 
 public class RegioJetPage {
 
+    private final String DATE_FORMAT = "EEEE, MMMM d, yyyy";
+
     private final By ORIGIN_CITY_INPUT_LOCATOR = By.id("react-select-2-input");
     private final By DESTINATION_CITY_INPUT_LOCATOR = By.id("react-select-3-input");
     private final By CITY_INPUT_OPTION_LOCATOR = By.cssSelector("div.menu-row");
@@ -65,7 +67,7 @@ public class RegioJetPage {
      */
     public RegioJetPage setDepartureDateToNextMonday() {
         element(DEPARTURE_DATE_BUTTON_LOCATOR).click();
-        element(DEPARTURE_DATE_CALENDAR_DAY_BUTTON_LOCATOR.apply(getNextMondayDay())).click();
+        element(DEPARTURE_DATE_CALENDAR_DAY_BUTTON_LOCATOR.apply(getNextMondayDay(DATE_FORMAT))).click();
         return this;
     }
 
@@ -94,20 +96,23 @@ public class RegioJetPage {
     }
 
     public List<List<ConnectionTransfer>> getTransfers() {
-        return getInfoFromConnectionCard( e -> e.findAll(CONNECTION_CARD_TRANSFER_ITEM).stream().map(transferItem -> {
-            ElementsCollection transferData = transferItem.findAll("div[aria-hidden='true']");
-            if (transferData.isEmpty()) { return null; }
+        return getInfoFromConnectionCard( e -> {
+            e.find(CONNECTION_CARD_TRANSFER_ITEM).shouldBe(visible);
+            return e.findAll(CONNECTION_CARD_TRANSFER_ITEM).stream().map(transferItem -> {
+                        ElementsCollection transferData = transferItem.findAll("div[aria-hidden='true']");
+                        if (transferData.isEmpty()) { return null; }
 
-            return new ConnectionTransfer(
-                    transferData.get(1).text(),
-                    transferData.get(4).text(),
-                    transferData.get(0).text(),
-                    transferData.get(3).text(),
-                    transferData.get(2).text()
-            );
-        })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList()));
+                        return new ConnectionTransfer(
+                                transferData.get(1).text(),
+                                transferData.get(4).text(),
+                                transferData.get(0).text(),
+                                transferData.get(3).text(),
+                                transferData.get(2).text()
+                        );
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        });
     }
 
     private RegioJetPage setCity(String city, By inputLocator) {

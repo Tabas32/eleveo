@@ -1,11 +1,14 @@
 package steps;
 
+import models.ConnectionTransfer;
 import models.SearchDetails;
 import org.assertj.core.api.SoftAssertions;
 import regioJetPage.RegioJetPage;
 import utils.StringUtils;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -16,9 +19,10 @@ import static utils.DateUtility.getNextMondayDay;
  */
 public class RegioJetSteps {
 
+    private final String DATE_FORMAT = "EEEE, MMMM d, yyyy";
+
     // Stores
     private SearchDetails searchDetails = new SearchDetails();
-    //private List<RouteConnection> routeConnections = new ArrayList(); todo remove
 
     // Page objects
     private RegioJetPage regioJetPage = new RegioJetPage();
@@ -35,7 +39,7 @@ public class RegioJetSteps {
 
         searchDetails.setOriginCity(originCity);
         searchDetails.setDestinationCity(destinationCity);
-        searchDetails.setDepartureDate(getNextMondayDay());
+        searchDetails.setDepartureDate(getNextMondayDay(DATE_FORMAT));
     }
 
     public void  connectionsAreDisplayedForTheSpecifiedDay() {
@@ -62,22 +66,52 @@ public class RegioJetSteps {
         assertThat(numbersOfTransferFromLabels).isEqualTo(numbersOfTransferFromTransfers);
     }
 
+    public void printInformationAboutRoutes() {
+        List<List<ConnectionTransfer>> allConnections = regioJetPage.getTransfers();
+
+        allConnections.stream().forEach( transfers -> {
+            if (transfers.isEmpty()) { return; }
+
+            System.out.println("\n===========================================");
+            System.out.println("Departure time: " + transfers.get(0).getDepartureTime());
+            System.out.println("Arrival time: " + transfers.get(transfers.size() - 1).getArrivalTime());
+            System.out.println("Transfers: " + (transfers.size() - 1));
+            System.out.println("Travel time (in train): " + sumOfTimes(transfers.stream().map(c -> c.getLength()).collect(Collectors.toList())));
+        });
+    }
+
     private void validateConnectionCardCities(List<String> cities, String expectedCity) {
         SoftAssertions softly = new SoftAssertions();
         cities.stream().forEach( city -> softly.assertThat(city).startsWith(expectedCity));
         softly.assertAll();
     }
 
-    public static void main(String[] args) {
-        RegioJetSteps steps = new RegioJetSteps();
+    private String sumOfTimes(List<String> times) {
+        int totalHours = 0;
+        int totalMinutes = 0;
 
-        steps.userOpensRegioJetPage();
-        steps.userSearchForConnectionForNextMonday("Ostrava", "Brno");
-        steps.connectionsAreDisplayedForTheSpecifiedDay();
+        for (String time : times) {
+            String[] parts = getOnlyTime(time).split(":");
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
 
-        steps.allConnectionDepartureFromSpecifiedCity();
-        steps.allConnectionArriveToSpecifiedCity();
-        steps.allConnectionsHaveCorrectNumberOfTransfersDisplayed();
+            totalHours += hours;
+            totalMinutes += minutes;
+        }
+
+        totalHours += totalMinutes / 60;
+        totalMinutes %= 60;
+
+        return String.format("%02d:%02d", totalHours, totalMinutes);
     }
 
+    private String getOnlyTime(String str) {
+        String timeRegex = "\\d{2}:\\d{2}";
+
+        Pattern pattern = Pattern.compile(timeRegex);
+        Matcher matcher = pattern.matcher(str);
+
+        matcher.find();
+        return matcher.group();
+    }
 }
