@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RegioJetSearch" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-06-28T20:42:47" hostname="marian-pc" time="35.188">
+  <properties/>
+  <testcase name="obtainData()" classname="RegioJetSearch" time="17.88"/>
+  <testcase name="obtainDataWithApiCalls()" classname="RegioJetSearch" time="0.362"/>
+  <testcase name="userIsAbleToSearchForRouteConnection()" classname="RegioJetSearch" time="16.943"/>
+  <system-out><![CDATA[Printing data obtained with selenide from GUI
+=============================================
+
+===========================================
+Departure time: 01:55
+Arrival time: 04:00
+Transfers: 0
+Travel time (in train): 02:05
+
+===========================================
+Departure time: 04:52
+Arrival time: 06:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 05:52
+Arrival time: 07:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 06:00
+Arrival time: 09:05
+Transfers: 0
+Travel time (in train): 03:05
+
+===========================================
+Departure time: 06:52
+Arrival time: 08:57
+Transfers: 0
+Travel time (in train): 02:05
+
+===========================================
+Departure time: 07:00
+Arrival time: 10:05
+Transfers: 0
+Travel time (in train): 03:05
+
+===========================================
+Departure time: 07:52
+Arrival time: 09:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 08:52
+Arrival time: 10:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 09:52
+Arrival time: 11:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 10:52
+Arrival time: 12:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 11:52
+Arrival time: 13:57
+Transfers: 0
+Travel time (in train): 02:05
+
+===========================================
+Departure time: 12:52
+Arrival time: 14:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 13:52
+Arrival time: 15:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 14:52
+Arrival time: 16:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 15:00
+Arrival time: 18:05
+Transfers: 0
+Travel time (in train): 03:05
+
+===========================================
+Departure time: 15:52
+Arrival time: 17:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 16:52
+Arrival time: 18:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 17:52
+Arrival time: 19:59
+Transfers: 0
+Travel time (in train): 02:07
+
+===========================================
+Departure time: 18:52
+Arrival time: 20:57
+Transfers: 0
+Travel time (in train): 02:05
+
+===========================================
+Departure time: 20:52
+Arrival time: 22:56
+Transfers: 0
+Travel time (in train): 02:04
+Printing data obtained from API
+===============================
+
+===========================================
+Departure time: 2023-07-03T01:55:00.000+02:00
+Arrival time: 2023-07-03T04:00:00.000+02:00
+Transfers: 0
+Price from: 12.1
+Travel time: 02:05 h
+
+===========================================
+Departure time: 2023-07-03T04:52:00.000+02:00
+Arrival time: 2023-07-03T06:59:00.000+02:00
+Transfers: 0
+Price from: 9.5
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T05:52:00.000+02:00
+Arrival time: 2023-07-03T07:59:00.000+02:00
+Transfers: 0
+Price from: 10.4
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T06:00:00.000+02:00
+Arrival time: 2023-07-03T09:05:00.000+02:00
+Transfers: 0
+Price from: 12.1
+Travel time: 03:05 h
+
+===========================================
+Departure time: 2023-07-03T06:52:00.000+02:00
+Arrival time: 2023-07-03T08:57:00.000+02:00
+Transfers: 0
+Price from: 10.4
+Travel time: 02:05 h
+
+===========================================
+Departure time: 2023-07-03T07:00:00.000+02:00
+Arrival time: 2023-07-03T10:05:00.000+02:00
+Transfers: 0
+Price from: 12.1
+Travel time: 03:05 h
+
+===========================================
+Departure time: 2023-07-03T07:52:00.000+02:00
+Arrival time: 2023-07-03T09:59:00.000+02:00
+Transfers: 0
+Price from: 10.4
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T08:52:00.000+02:00
+Arrival time: 2023-07-03T10:59:00.000+02:00
+Transfers: 0
+Price from: 10.4
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T09:52:00.000+02:00
+Arrival time: 2023-07-03T11:59:00.000+02:00
+Transfers: 0
+Price from: 9.5
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T10:52:00.000+02:00
+Arrival time: 2023-07-03T12:59:00.000+02:00
+Transfers: 0
+Price from: 9.5
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T11:52:00.000+02:00
+Arrival time: 2023-07-03T13:57:00.000+02:00
+Transfers: 0
+Price from: 8.6
+Travel time: 02:05 h
+
+===========================================
+Departure time: 2023-07-03T12:52:00.000+02:00
+Arrival time: 2023-07-03T14:59:00.000+02:00
+Transfers: 0
+Price from: 8.6
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T13:52:00.000+02:00
+Arrival time: 2023-07-03T15:59:00.000+02:00
+Transfers: 0
+Price from: 9.5
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T14:52:00.000+02:00
+Arrival time: 2023-07-03T16:59:00.000+02:00
+Transfers: 0
+Price from: 10.4
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T15:00:00.000+02:00
+Arrival time: 2023-07-03T18:05:00.000+02:00
+Transfers: 0
+Price from: 12.1
+Travel time: 03:05 h
+
+===========================================
+Departure time: 2023-07-03T15:52:00.000+02:00
+Arrival time: 2023-07-03T17:59:00.000+02:00
+Transfers: 0
+Price from: 9.5
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T16:52:00.000+02:00
+Arrival time: 2023-07-03T18:59:00.000+02:00
+Transfers: 0
+Price from: 9.5
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T17:52:00.000+02:00
+Arrival time: 2023-07-03T19:59:00.000+02:00
+Transfers: 0
+Price from: 8.6
+Travel time: 02:07 h
+
+===========================================
+Departure time: 2023-07-03T18:52:00.000+02:00
+Arrival time: 2023-07-03T20:57:00.000+02:00
+Transfers: 0
+Price from: 8.6
+Travel time: 02:05 h
+
+===========================================
+Departure time: 2023-07-03T20:52:00.000+02:00
+Arrival time: 2023-07-03T22:56:00.000+02:00
+Transfers: 0
+Price from: 7.3
+Travel time: 02:04 h
+]]></system-out>
+  <system-err><![CDATA[SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+Starting ChromeDriver 114.0.5735.90 (386bc09e8f4f2e025eddae123f36f6263096ae49-refs/branch-heads/5735@{#1052}) on port 31091
+Only local connections are allowed.
+Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+ChromeDriver was started successfully.
+Jun 28, 2023 10:42:49 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+WARNING: Unable to find an exact match for CDP version 114, so returning the closest version found: 113
+]]></system-err>
+</testsuite>
